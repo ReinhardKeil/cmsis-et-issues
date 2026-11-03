@@ -13,6 +13,14 @@ Tested on `Zephyr_app.Debug+Corstone-320-FVP` with PyTorch ExecuTorch `1.6.0-zep
 
 **GCC version labels:** Arm Tools Environment Manager calls the tested artifact `15.3.2` (Arm GNU Toolchain `15.3.Rel2`, build `arm-15.181`), while GCC itself and CMake report its upstream compiler core as `15.3.1`; these names identify the same tested installation.
 
+## Reported issues
+
+| Issue | Reported problem |
+|---|---|
+| [Open-CMSIS-Pack/devtools #2685](https://github.com/Open-CMSIS-Pack/devtools/issues/2685) | `west-defs` splits `-include stddef.h` and passes a bare `-include`. |
+| [Open-CMSIS-Pack/devtools #2686](https://github.com/Open-CMSIS-Pack/devtools/issues/2686) | cbuild maps CLANG to Zephyr's unsupported `llvm` variant instead of `host/llvm`. |
+| [Open-CMSIS-Pack/devtools #2688](https://github.com/Open-CMSIS-Pack/devtools/issues/2688) | `--toolchain AC6@6.24.0` emits an empty `ZEPHYR_TOOLCHAIN_VARIANT`. |
+
 ## CMSIS-ExecuTorch source
 
 - **Error, AC6/GCC:** `include/executorch/runtime/core/tag.h:73,79` uses `size_t` without including `<stddef.h>`; add that include upstream, or temporarily pass the no-space driver option `-includestddef.h` (the current `-include stddef.h` is split by `cbuild`).

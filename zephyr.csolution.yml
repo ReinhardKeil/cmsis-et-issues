@@ -84,5 +84,5 @@ solution:
       system: RTSS_HP_SRAM_MRAM
       memory: Shared_Sram
 
-  compiler: GCC
+  compiler: AC6
   created-for: CMSIS-Toolbox@2.15.0

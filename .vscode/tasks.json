@@ -35,7 +35,7 @@
                 "-f",
                 "fvp.config",
                 "-a",
-                "out/Zephyr_app/Corstone-320-FVP/Debug/zephyr/zephyr.elf"
+                "out/Zephyr_app/Corstone-320-FVP/Debug/zephyr/zephyr.hex"
             ],
             "problemMatcher": []
         },

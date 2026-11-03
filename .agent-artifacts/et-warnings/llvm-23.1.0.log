@@ -1,0 +1,55 @@
++----------------------------------------------------------
+(1/1) Cleaning context: "Zephyr_app.Debug+Corstone-320-FVP"
++----------------------------------------------------------
+(1/1) Building context: "Zephyr_app.Debug+Corstone-320-FVP"
+Building CMake target 'Zephyr_app.Debug+Corstone-320-FVP'
+Using compiler: CLANG V23.1.0
+[0/2] C:\WINDOWS\system32\cmd.exe /C "cd /D C:\w\zephyr-cmsis-executorch-test-app\.agent-artifacts\et-warnings\llvm-23.1.0\tmp\1 && C:\Users\reikei01\.vcpkg\artifacts\2139c4c6\tools.kitware.cmake\3.31.12\bin\cmake.exe -E cmake_echo_color --blue " Setup west build directory" && cmake -E env LLVM_TOOLCHAIN_PATH="c:/Users/reikei01/.vcpkg/artifacts/2139c4c6/compilers.arm.llvm.embedded/23.1.0/" ZEPHYR_TOOLCHAIN_VARIANT="llvm" west build -b mps4/corstone320/fvp -d C:/w/zephyr-cmsis-executorch-test-app/.agent-artifacts/et-warnings/llvm-23.1.0/out/Zephyr_app/Corstone-320-FVP/Debug -p auto --cmake-only C:/w/zephyr-cmsis-executorch-test-app/. -- -DEXTRA_ZEPHYR_MODULES=C:/Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.6.0-zephyrpreview1 -DCONFIG_BUILD_OUTPUT_HEX=y -DDTC_OVERLAY_FILE=fvp.overlay -DCMAKE_CXX_FLAGS=-includestddef.h -DCONFIG_DEBUG=y -DCONFIG_DEBUG_THREAD_INFO=y -DCONFIG_DEBUG_OPTIMIZATIONS=y"
+ Setup west build directory
+-- west build: generating a build system
+Loading Zephyr default modules (Zephyr base).
+-- Application: C:/w/zephyr-cmsis-executorch-test-app
+-- CMake version: 3.31.12
+-- Found Python3: C:/w/zephyrproject/.venv/Scripts/python.exe (found suitable version "3.13.1", minimum required is "3.12") found components: Interpreter
+-- Cache files will be written to: C:/w/zephyrproject/zephyr/.cache
+-- Zephyr version: 4.5.0-rc3 (C:/w/zephyrproject/zephyr)
+-- Found west (found suitable version "1.5.0", minimum required is "0.14.0")
+-- Board: mps4, qualifiers: corstone320/fvp
+CMake Error at C:/w/zephyrproject/zephyr/cmake/modules/FindHostTools.cmake:113 (include):
+  include could not find requested file:
+
+    C:/w/zephyrproject/zephyr/cmake/toolchain/llvm/generic.cmake
+Call Stack (most recent call first):
+  C:/w/zephyrproject/zephyr/cmake/modules/dts.cmake:9 (find_package)
+  C:/w/zephyrproject/zephyr/cmake/modules/zephyr_default.cmake:115 (include)
+  C:/w/zephyrproject/zephyr/share/zephyr-package/cmake/ZephyrConfig.cmake:57 (include)
+  C:/w/zephyrproject/zephyr/share/zephyr-package/cmake/ZephyrConfig.cmake:83 (include_boilerplate)
+  CMakeLists.txt:13 (find_package)
+
+
+-- Found Dtc: C:/Users/reikei01/.mcuxpressotools/dtc-msys2/tools/usr/bin/dtc.exe (found suitable version "1.6.1", minimum required is "1.4.6")
+-- Found BOARD.dts: C:/w/zephyrproject/zephyr/boards/arm/mps4/mps4_corstone320_fvp.dts
+-- Found devicetree overlay: fvp.overlay
+CMake Error at C:/w/zephyrproject/zephyr/cmake/modules/extensions.cmake:5718 (message):
+  dt_preprocess() missing required argument: CPP
+Call Stack (most recent call first):
+  C:/w/zephyrproject/zephyr/cmake/modules/dts.cmake:266 (zephyr_dt_preprocess)
+  C:/w/zephyrproject/zephyr/cmake/modules/dts.cmake:447 (dts_edt_pickle)
+  C:/w/zephyrproject/zephyr/cmake/modules/zephyr_default.cmake:119 (dts_init)
+  C:/w/zephyrproject/zephyr/cmake/modules/zephyr_default.cmake:119 (cmake_language)
+  C:/w/zephyrproject/zephyr/share/zephyr-package/cmake/ZephyrConfig.cmake:57 (include)
+  C:/w/zephyrproject/zephyr/share/zephyr-package/cmake/ZephyrConfig.cmake:83 (include_boilerplate)
+  CMakeLists.txt:13 (find_package)
+
+
+-- Configuring incomplete, errors occurred!
+FATAL ERROR: command exited with status 1: 'c:\Users\reikei01\.vcpkg\artifacts\2139c4c6\tools.kitware.cmake\3.31.12\bin\cmake.EXE' -DWEST_PYTHON=C:/w/zephyrproject/.venv/Scripts/python.exe -DWEST_TOPDIR=C:/w/zephyrproject -DWEST_VERSION=1.5.0 '-BC:\w\zephyr-cmsis-executorch-test-app\.agent-artifacts\et-warnings\llvm-23.1.0\out\Zephyr_app\Corstone-320-FVP\Debug' -GNinja '-DWEST_PYTHON_PROPERTIES="Python;3;13;1;64;;cp313-win_amd64.pyd;;C:\Python313\Lib;C:\w\zephyrproject\.venv\Lib;C:\w\zephyrproject\.venv\Lib\site-packages;C:\w\zephyrproject\.venv\Lib\site-packages"' -DBOARD=mps4/corstone320/fvp -DEXTRA_ZEPHYR_MODULES=C:/Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.6.0-zephyrpreview1 -DCONFIG_BUILD_OUTPUT_HEX=y -DDTC_OVERLAY_FILE=fvp.overlay -DCMAKE_CXX_FLAGS=-includestddef.h -DCONFIG_DEBUG=y -DCONFIG_DEBUG_THREAD_INFO=y -DCONFIG_DEBUG_OPTIMIZATIONS=y '-SC:\w\zephyr-cmsis-executorch-test-app'
+FAILED: [code=1] C:/w/zephyr-cmsis-executorch-test-app/.agent-artifacts/et-warnings/llvm-23.1.0/out/Zephyr_app/Corstone-320-FVP/Debug/CMakeCache.txt C:/w/zephyr-cmsis-executorch-test-app/.agent-artifacts/et-warnings/llvm-23.1.0/out/Zephyr_app/Corstone-320-FVP/Debug/compile_commands.json 
+C:\WINDOWS\system32\cmd.exe /C "cd /D C:\w\zephyr-cmsis-executorch-test-app\.agent-artifacts\et-warnings\llvm-23.1.0\tmp\1 && C:\Users\reikei01\.vcpkg\artifacts\2139c4c6\tools.kitware.cmake\3.31.12\bin\cmake.exe -E cmake_echo_color --blue " Setup west build directory" && cmake -E env LLVM_TOOLCHAIN_PATH="c:/Users/reikei01/.vcpkg/artifacts/2139c4c6/compilers.arm.llvm.embedded/23.1.0/" ZEPHYR_TOOLCHAIN_VARIANT="llvm" west build -b mps4/corstone320/fvp -d C:/w/zephyr-cmsis-executorch-test-app/.agent-artifacts/et-warnings/llvm-23.1.0/out/Zephyr_app/Corstone-320-FVP/Debug -p auto --cmake-only C:/w/zephyr-cmsis-executorch-test-app/. -- -DEXTRA_ZEPHYR_MODULES=C:/Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.6.0-zephyrpreview1 -DCONFIG_BUILD_OUTPUT_HEX=y -DDTC_OVERLAY_FILE=fvp.overlay -DCMAKE_CXX_FLAGS=-includestddef.h -DCONFIG_DEBUG=y -DCONFIG_DEBUG_THREAD_INFO=y -DCONFIG_DEBUG_OPTIMIZATIONS=y"
+ninja: build stopped: subcommand failed.
+FAILED: [code=1] Zephyr_app.Debug+Corstone-320-FVP/src/Zephyr_app.Debug+Corstone-320-FVP-stamp/Zephyr_app.Debug+Corstone-320-FVP-build C:/w/zephyr-cmsis-executorch-test-app/.agent-artifacts/et-warnings/llvm-23.1.0/out/Zephyr_app/Corstone-320-FVP/Debug/zephyr/zephyr.elf C:/w/zephyr-cmsis-executorch-test-app/.agent-artifacts/et-warnings/llvm-23.1.0/out/Zephyr_app/Corstone-320-FVP/Debug/zephyr/zephyr.hex C:/w/zephyr-cmsis-executorch-test-app/.agent-artifacts/et-warnings/llvm-23.1.0/out/Zephyr_app/Corstone-320-FVP/Debug/compile_commands.json C:/w/zephyr-cmsis-executorch-test-app/.agent-artifacts/et-warnings/llvm-23.1.0/out/Zephyr_app/Corstone-320-FVP/Debug/compile_macros_c.h C:/w/zephyr-cmsis-executorch-test-app/.agent-artifacts/et-warnings/llvm-23.1.0/out/Zephyr_app/Corstone-320-FVP/Debug/compile_macros_cxx.h C:/w/zephyr-cmsis-executorch-test-app/.agent-artifacts/et-warnings/llvm-23.1.0/tmp/Zephyr_app.Debug+Corstone-320-FVP/src/Zephyr_app.Debug+Corstone-320-FVP-stamp/Zephyr_app.Debug+Corstone-320-FVP-build 
+C:\WINDOWS\system32\cmd.exe /C "cd /D C:\w\zephyr-cmsis-executorch-test-app\.agent-artifacts\et-warnings\llvm-23.1.0\tmp\1 && C:\Users\reikei01\.vcpkg\artifacts\2139c4c6\tools.kitware.cmake\3.31.12\bin\cmake.exe -E cmake_echo_color --blue --bold "Building CMake target 'Zephyr_app.Debug+Corstone-320-FVP'" && C:\Users\reikei01\.vcpkg\artifacts\2139c4c6\tools.kitware.cmake\3.31.12\bin\cmake.exe -E echo "Using compiler: CLANG V23.1.0" && C:\Users\reikei01\.vcpkg\artifacts\2139c4c6\tools.kitware.cmake\3.31.12\bin\cmake.exe --build C:/w/zephyr-cmsis-executorch-test-app/.agent-artifacts/et-warnings/llvm-23.1.0/tmp/1 "--target west""
+ninja: build stopped: subcommand failed.
++------------------------------------------------------------
+Build summary: 0 succeeded, 1 failed - Time Elapsed: 00:00:07
++============================================================

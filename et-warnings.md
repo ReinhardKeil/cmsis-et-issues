@@ -28,8 +28,8 @@ Tested on `Zephyr_app.Debug+Corstone-320-FVP` with PyTorch ExecuTorch `1.6.0-zep
 
 ## Integration and application diagnostics
 
-- **Error, cbuild/AC6:** selecting `AC6@6.24.0` with `--toolchain` generates `ZEPHYR_TOOLCHAIN_VARIANT=""`, so Zephyr searches for the Zephyr SDK; use `compiler: AC6` in `zephyr.csolution.yml` and ensure the generated command selects `armclang`.
-- **Error, all compilers via cbuild:** `zephyr.csolution.yml:41` passes `CMAKE_CXX_FLAGS: -include stddef.h`, which becomes a bare `-include`; use `-includestddef.h` temporarily or, preferably, fix `tag.h`.
+- **Error, cbuild/AC6:** selecting `AC6@6.24.0` with `--toolchain` generates `ZEPHYR_TOOLCHAIN_VARIANT=""`, so Zephyr searches for the Zephyr SDK; use `compiler: AC6` in `zephyr.csolution.yml` and ensure the generated command selects `armclang` ([devtools #2688](https://github.com/Open-CMSIS-Pack/devtools/issues/2688)).
+- **Error, all compilers via cbuild:** `zephyr.csolution.yml:41` passes `CMAKE_CXX_FLAGS: -include stddef.h`, which becomes a bare `-include`; use `-includestddef.h` temporarily or, preferably, fix `tag.h` ([devtools #2685](https://github.com/Open-CMSIS-Pack/devtools/issues/2685)).
 - **Warning, CMake/all compilers:** the generated CMSIS-ExecuTorch object path can exceed CMake's safe 250-character Windows limit; use a short output directory.
 - **Warnings, AC6/GCC:** `src/arm_embedded_module.cpp:26` initializes members out of declaration order and `src/arm_embedded_module.hpp:545,546` stores unused PTE fields; reorder the initializer list and remove or use the fields.
 - **Warnings, GCC 14/15:** `src/arm_embedded_module.cpp:70,101,162,225` and `src/executorch_test.cpp:118` compare signed and unsigned counts; validate and use matching index/count types.
@@ -38,6 +38,8 @@ Tested on `Zephyr_app.Debug+Corstone-320-FVP` with PyTorch ExecuTorch `1.6.0-zep
 - **Warnings, GCC 14/15 linker:** the generated `DT_N_NODELABEL_sram0_P_zephyr_memory_region_STRING_TOKEN` section is orphaned and the ELF has an RWX load segment; give the temporary pool a valid iterable/NOLOAD linker placement with explicit permissions.
 
 ## cbuild CLANG-to-Zephyr integration failure
+
+Tracked as [Open-CMSIS-Pack/devtools #2686](https://github.com/Open-CMSIS-Pack/devtools/issues/2686).
 
 This is a CMSIS-Toolbox integration issue. With `compiler: CLANG`, cbuild 2.15 detects LLVM Embedded 23.1.0 but generates:
 

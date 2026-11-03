@@ -1,0 +1,13 @@
+cbuild-pack:
+  resolved-packs:
+    - resolved-pack: ARM::SSE_320_BSP@2.0.0
+      selected-by-pack:
+        - ARM::SSE_320_BSP@^2.0.0
+    - resolved-pack: AlifSemiconductor::Ensemble@2.2.1
+      selected-by-pack:
+        - AlifSemiconductor::Ensemble@^2.2.0-0
+    - resolved-pack: PyTorch::ExecuTorch@1.6.0-zephyrpreview1
+      selected-by-pack:
+        - PyTorch::Executorch
+        - PyTorch::Executorch@^1.6.0-0
+        - PyTorch::Executorch@^1.6.0-zephyrpreview1

@@ -1,0 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+
+/*
+ * The Corstone-320 Zephyr board already declares its Ethos-U85. Keep this
+ * overlay separate from app.overlay, which contains the Alif E8 NPU node.
+ */

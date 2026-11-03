@@ -1,0 +1,14 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+
+/ {
+	/* Alif Ensemble 2.2.1: NPU_HG_BASE and M55_HP IRQ366 (Ethos-U85). */
+	ethosu0: npu@49042000 {
+		compatible = "arm,ethos-u";
+		reg = <0x49042000 0x2000>;
+		interrupt-parent = <&nvic>;
+		interrupts = <366 2>;
+		secure-enable;
+		privilege-enable;
+		status = "okay";
+	};
+};

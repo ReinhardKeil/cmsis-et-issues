@@ -1,0 +1,21 @@
+build-idx:
+  generated-by: csolution version 2.15.1+p42-g0fee5e8e
+  target: Corstone-320-FVP
+  csolution: zephyr.csolution.yml
+  cbuild-run: out/zephyr+Corstone-320-FVP.cbuild-run.yml
+  tmpdir: tmp/Corstone-320-FVP/default
+  cbuilds:
+    - cbuild: out/Zephyr_app/Corstone-320-FVP/Debug/Zephyr_app.Debug+Corstone-320-FVP.cbuild.yml
+      west: true
+      project: Zephyr_app
+      configuration: .Debug+Corstone-320-FVP
+      messages:
+        info:
+          - zephyr.cbuild-pack.yml - file is already up-to-date
+          - zephyr+Corstone-320-FVP.cbuild-run.yml - file generated successfully
+          - zephyr.cbuild-mlops.yml - file is already up-to-date
+          - Zephyr_app.Debug+Corstone-320-FVP.cbuild.yml - file generated successfully
+      packs-unused:
+        - pack: AlifSemiconductor::Ensemble@2.2.1
+        - pack: PyTorch::ExecuTorch@1.6.0-zephyrpreview1
+      rebuild: true

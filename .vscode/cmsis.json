@@ -1,0 +1,9 @@
+{
+    "targetSet": {
+        "zephyr": {
+            "activeTargetType": "Corstone-320-FVP"
+        }
+    },
+    "activeSolution": "../zephyr.csolution.yml",
+    "activeTarget": "Corstone-320-FVP"
+}

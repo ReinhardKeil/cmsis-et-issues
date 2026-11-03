@@ -1,0 +1,4 @@
+out/
+tmp/
+.agent-artifacts/
+__pycache__/

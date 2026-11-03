@@ -1,0 +1,87 @@
+# A solution is a collection of related projects that share same base configuration.
+solution:
+
+  # List the packs that define the device and/or board.
+  packs:
+    - pack: ARM::SSE_320_BSP@^2.0.0
+    - pack: AlifSemiconductor::Ensemble@^2.2.0-0
+    - pack: PyTorch::Executorch@^1.6.0-0
+
+  # List different hardware targets that are used to deploy the solution.
+  target-types:
+    - type: DevKit-E8
+      board: DevKit-E8
+      device: AE822FA0E5597LS0:M55_HP
+      variables:
+        # west board selection
+        - west-board: ensemble_e8_dk/ae822fa0e5597ls0/rtss_hp
+      west-defs:
+        - DTC_OVERLAY_FILE: app.overlay
+      target-set:
+        - set:
+          debugger:
+            name: ULINKplus@pyOCD
+            port: 3333
+            protocol: swd
+            clock: 10000000
+            load-setup:
+              # Avoid resuming the flash algorithm before a debugger pin reset.
+              post-reset: system
+          images:
+            - project-context: Zephyr_app.Debug
+
+    - type: Corstone-320-FVP
+      board: ARM::SSE-320
+      device: ARM::SSE-320-FVP
+      variables:
+        - west-board: mps4/corstone320/fvp
+      west-defs:
+        - DTC_OVERLAY_FILE: fvp.overlay
+        # ExecuTorch tag.h uses size_t without including <stddef.h>.
+        - CMAKE_CXX_FLAGS: -include stddef.h
+      target-set:
+        - set:
+          debugger:
+            name: Arm-FVP
+            model: FVP_Corstone_SSE-320
+            args: -C mps4_board.uart0.out_file=- -C mps4_board.uart0.unbuffered_output=1
+          images:
+            - project-context: Zephyr_app.Debug
+
+  build-types:
+    - type: Debug
+      debug: on
+      optimize: debug
+      west-defs:
+        - CONFIG_DEBUG: y
+        - CONFIG_DEBUG_THREAD_INFO: y
+        - CONFIG_DEBUG_OPTIMIZATIONS: y
+
+    - type: Release
+      optimize: speed
+      west-defs:
+        - CONFIG_SPEED_OPTIMIZATIONS: y
+        
+  # List related projects.
+  projects:
+    - west:
+        project-id: Zephyr_app
+        app-path: .
+        board: $west-board$
+        west-defs:
+#         - EXTRA_ZEPHYR_MODULES: /Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.5.1;/Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.6.0-zephyrpreview1
+          - EXTRA_ZEPHYR_MODULES: ${CMSIS_PACK_ROOT}/PyTorch/ExecuTorch/1.6.0-zephyrpreview1
+#         - EXTRA_ZEPHYR_MODULES: /Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.6.0-zephyrpreview1
+#          - EXTRA_ZEPHYR_MODULES: $PACK(PyTorch::Executorch)$
+
+  mlops:
+    description: Ethos-U85 network demos and benchmarks for Alif DevKit-E8
+    npu:
+      type: Ethos-U85
+      macs: 256
+    vela:
+      system: RTSS_HP_SRAM_MRAM
+      memory: Shared_Sram
+
+  compiler: AC6
+  created-for: CMSIS-Toolbox@2.14.1

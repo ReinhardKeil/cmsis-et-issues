@@ -118,8 +118,10 @@ generated `zephyr.elf` and `zephyr.hex`. The linked constructor table contains
 two entries (8 bytes), and the application startup hook is present. The
 compile database contains one model compilation and no bare-metal shim path.
 The final link still warns that the Ethos-U driver archive is listed twice;
-armlink ignores the duplicate. Compilation also reports existing deprecated
-API, ctype-macro, and finite-floating-point warnings.
+armlink ignores the duplicate. See the
+[Ethos-U CMake issue report](ethos-u-cmake-duplicate-archive-report.md) for
+reproduction steps and dependency analysis. Compilation also reports existing
+deprecated API, ctype-macro, and finite-floating-point warnings.
 
 Runtime validation on the Corstone-320 FVP completed the existing inference
 test: execution reached the `Test_result: PASS` path after validating one

@@ -1,5 +1,5 @@
 cbuild-mlops:
-  generated-by: csolution version 2.15.1+p42-g0fee5e8e
+  generated-by: csolution version 2.15.1+p3-gf46d68bf
   description: Ethos-U85 network demos and benchmarks for Alif DevKit-E8
   processor:
     type: Cortex-M55
@@ -22,3 +22,4 @@ cbuild-mlops:
       - file: out/Zephyr_app/Corstone-320-FVP/Debug/zephyr/zephyr.elf
         type: elf
     model: FVP_Corstone_SSE-320
+    config-file: fvp.config

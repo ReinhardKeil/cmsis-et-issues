@@ -542,8 +542,8 @@ namespace arm
 
       std::unique_ptr<EventTracer> event_tracer_;
 
-      const unsigned char *pte_data_;
-      size_t pte_size_;
+      [[maybe_unused]] const unsigned char *pte_data_;
+      [[maybe_unused]] size_t pte_size_;
 
     protected:
       std::unordered_map<std::string, MethodHolder> methods_;

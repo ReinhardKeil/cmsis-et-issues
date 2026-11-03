@@ -10,6 +10,20 @@ west build -b mps4/corstone320/fvp applications/my_app
 west build -t run
 ```
 
+CMSIS Run and Debug share [`fvp.config`](fvp.config), which selects the secure
+ITCM boot vectors, 16 secure MPU regions, a 256-MAC Ethos-U85, and unbuffered
+UART0 output on stdout. It also disables graphical and telnet terminal windows.
+The equivalent direct model invocation from this application folder is:
+
+```sh
+FVP_Corstone_SSE-320 -f fvp.config -a out/Zephyr_app/Corstone-320-FVP/Debug/zephyr/zephyr.elf
+```
+
+[`fvp.overlay`](fvp.overlay) maps the console to the installed SSE-320 FVP's
+UART0 window at `0x59303000` and disables unused UART3/UART4, whose pin setup
+faults on this model. The inference scratch pool uses default system SRAM on
+FVP; the Alif target retains its `sram0` placement.
+
 The FVP executable is supplied by the `arm:models/arm/avh-fvp` artifact. If it
 is installed elsewhere, set `ARMFVP_BIN_PATH` to the directory containing
 `FVP_Corstone_SSE-320` before running the Zephyr target.

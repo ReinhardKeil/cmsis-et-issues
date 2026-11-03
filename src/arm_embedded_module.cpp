@@ -23,10 +23,10 @@ namespace arm
                                    std::unique_ptr<DataLoader> data_loader,
                                    std::unique_ptr<MemoryAllocator> memory_allocator,
                                    std::unique_ptr<MemoryAllocator> temp_allocator)
-        : pte_data_(pte_data), pte_size_(pte_size),
-          data_loader_(std::move(data_loader)),
+        : data_loader_(std::move(data_loader)),
           memory_allocator_(std::move(memory_allocator)),
-          temp_allocator_(std::move(temp_allocator))
+          temp_allocator_(std::move(temp_allocator)),
+          pte_data_(pte_data), pte_size_(pte_size)
     {
     }
 
@@ -67,7 +67,7 @@ namespace arm
       std::unordered_set<std::string> result;
       result.reserve(method_count);
 
-      for (auto index = 0; index < method_count; ++index)
+      for (size_t index = 0; index < method_count; ++index)
       {
         result.emplace(program_->get_method_name(index).get());
       }
@@ -98,7 +98,7 @@ namespace arm
           method_holder.planned_buffers.reserve(planned_buffers_count);
           method_holder.planned_spans.reserve(planned_buffers_count);
 
-          for (auto index = 0; index < planned_buffers_count; ++index)
+          for (size_t index = 0; index < planned_buffers_count; ++index)
           {
             const auto buffer_size =
                 static_cast<size_t>(method_metadata.memory_planned_buffer_size(index).get());
@@ -159,7 +159,7 @@ namespace arm
     {
       ET_CHECK_OK_OR_RETURN_ERROR(load_method(method_name));
       auto &method = methods_.at(method_name).method;
-      for (auto index = 0; index < input_values.size(); ++index)
+      for (size_t index = 0; index < input_values.size(); ++index)
       {
         ET_CHECK_OK_OR_RETURN_ERROR(method->set_input(input_values[index], index));
       }
@@ -222,7 +222,7 @@ namespace arm
           "output size: %zu is not equal to method output size: %zu",
           output_values.size(),
           outputs_size);
-      for (auto index = 0; index < outputs_size; ++index)
+      for (size_t index = 0; index < outputs_size; ++index)
       {
         ET_CHECK_OK_OR_RETURN_ERROR(
             set_output(method_name, output_values[index], index));

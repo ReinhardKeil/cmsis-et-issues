@@ -32,10 +32,8 @@
                 }
             },
             "args": [
-                "-C",
-                "mps4_board.uart0.out_file=-",
-                "-C",
-                "mps4_board.uart0.unbuffered_output=1",
+                "-f",
+                "fvp.config",
                 "-a",
                 "out/Zephyr_app/Corstone-320-FVP/Debug/zephyr/zephyr.hex"
             ],

@@ -39,7 +39,10 @@ constexpr size_t kTempPoolSize = 64 * 1024;
 alignas(64) uint8_t g_method_pool[kMethodPoolSize];
 // The NPU uses scratch directly. Keep it in system SRAM rather than CPU-local DTCM.
 alignas(64) uint8_t g_temp_pool[kTempPoolSize]
-    Z_GENERIC_SECTION(LINKER_DT_NODE_REGION_NAME(DT_NODELABEL(sram0)));
+#if DT_NODE_EXISTS(DT_NODELABEL(sram0))
+    Z_GENERIC_SECTION(LINKER_DT_NODE_REGION_NAME(DT_NODELABEL(sram0)))
+#endif
+    ; // On FVP the default RAM is already system SRAM.
 
 } // namespace
 
@@ -108,14 +111,17 @@ extern "C" int executorch_run_test(void)
 
   const EValue& out = outputs->front();
   Tensor tensor = out.toTensor();
-  if (tensor.scalar_type() != ScalarType::Float || tensor.numel() != 10) {
+  const auto num_output_elements = tensor.numel();
+  if (tensor.scalar_type() != ScalarType::Float || num_output_elements != 10) {
     printf("forward expected ten float logits\nTest_result: FAIL\n");
     return 1;
   }
 
-  printf("Output: %u element(s):", static_cast<unsigned>(tensor.numel()));
+  // The signed element count is positive after the ten-logit check above.
+  const auto output_count = static_cast<size_t>(num_output_elements);
+  printf("Output: %zu element(s):", output_count);
   const float* data = tensor.const_data_ptr<float>();
-  for (size_t i = 0; i < tensor.numel(); ++i) {
+  for (size_t i = 0; i < output_count; ++i) {
     printf(" %.4f", static_cast<double>(data[i]));
   }
   printf("\nTest_result: PASS\n");

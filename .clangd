@@ -1,5 +1,5 @@
 CompileFlags:
-  CompilationDatabase: c:\w\zephyr-cmsis-executorch-test-app\out\Zephyr_app\Corstone-320-FVP\Debug
+  CompilationDatabase: c:\Users\chrfav01\benchresults\zephyr-repo\applications\cmsis-et-issues\out\Zephyr_app\Corstone-320-FVP\Debug
   Add:
     - "-D_ILP32=1\r\n"
     - "-D_USE_STATIC_INLINE=1\r\n"
@@ -21,21 +21,30 @@ CompileFlags:
     - "-D__ARM_FEATURE_COPROC=0xf\r\n"
     - "-D__ARM_FEATURE_DIRECTED_ROUNDING=1\r\n"
     - "-D__ARM_FEATURE_DSP=1\r\n"
+    - "-D__ARM_FEATURE_FMA=1\r\n"
+    - "-D__ARM_FEATURE_FP16_SCALAR_ARITHMETIC=1\r\n"
     - "-D__ARM_FEATURE_IDIV=1\r\n"
     - "-D__ARM_FEATURE_LDREX=0xf\r\n"
+    - "-D__ARM_FEATURE_MVE=3\r\n"
     - "-D__ARM_FEATURE_NUMERIC_MAXMIN=1\r\n"
     - "-D__ARM_FEATURE_PAUTH=1\r\n"
     - "-D__ARM_FEATURE_QBIT=1\r\n"
     - "-D__ARM_FEATURE_SAT=1\r\n"
     - "-D__ARM_FEATURE_SIMD32=1\r\n"
     - "-D__ARM_FEATURE_UNALIGNED=1\r\n"
+    - "-D__ARM_FP=0xe\r\n"
     - "-D__ARM_FP16_ARGS=1\r\n"
     - "-D__ARM_FP16_FORMAT_IEEE=1\r\n"
+    - "-D__ARM_FPV5__=1\r\n"
     - "-D__ARM_NO_IMAGINARY_TYPE=1\r\n"
     - "-D__ARM_PCS=1\r\n"
+    - "-D__ARM_PCS_VFP=1\r\n"
     - "-D__ARM_PROMISE=__builtin_assume\r\n"
     - "-D__ARM_SIZEOF_MINIMAL_ENUM=4\r\n"
     - "-D__ARM_SIZEOF_WCHAR_T=4\r\n"
+    - "-D__ARM_VFPV2__=1\r\n"
+    - "-D__ARM_VFPV3__=1\r\n"
+    - "-D__ARM_VFPV4__=1\r\n"
     - "-D__ATOMIC_ACQUIRE=2\r\n"
     - "-D__ATOMIC_ACQ_REL=4\r\n"
     - "-D__ATOMIC_CONSUME=1\r\n"
@@ -244,13 +253,13 @@ CompileFlags:
     - "-D__MEMORY_SCOPE_SYSTEM=0\r\n"
     - "-D__MEMORY_SCOPE_WRKGRP=2\r\n"
     - "-D__MEMORY_SCOPE_WVFRNT=3\r\n"
+    - "-D__NO_INLINE__=1\r\n"
     - "-D__OBJC_BOOL_IS_BOOL=0\r\n"
     - "-D__OPENCL_MEMORY_SCOPE_ALL_SVM_DEVICES=3\r\n"
     - "-D__OPENCL_MEMORY_SCOPE_DEVICE=2\r\n"
     - "-D__OPENCL_MEMORY_SCOPE_SUB_GROUP=4\r\n"
     - "-D__OPENCL_MEMORY_SCOPE_WORK_GROUP=1\r\n"
     - "-D__OPENCL_MEMORY_SCOPE_WORK_ITEM=0\r\n"
-    - "-D__OPTIMIZE__=1\r\n"
     - "-D__ORDER_BIG_ENDIAN__=4321\r\n"
     - "-D__ORDER_LITTLE_ENDIAN__=1234\r\n"
     - "-D__ORDER_PDP_ENDIAN__=3412\r\n"
@@ -286,7 +295,6 @@ CompileFlags:
     - "-D__SIZE_MAX__=4294967295U\r\n"
     - "-D__SIZE_TYPE__=unsigned int\r\n"
     - "-D__SIZE_WIDTH__=32\r\n"
-    - "-D__SOFTFP__=1\r\n"
     - "-D__STDC_EMBED_EMPTY__=2\r\n"
     - "-D__STDC_EMBED_FOUND__=1\r\n"
     - "-D__STDC_EMBED_NOT_FOUND__=0\r\n"
@@ -411,23 +419,24 @@ CompileFlags:
     - "-D__thumb2__=1\r\n"
     - "-D__thumb__=1\r\n"
     - -D__ARMCOMPILER_LIBCXX=1
-    - -IC:/w/zephyrproject/zephyr/include
-    - -IC:/w/zephyr-cmsis-executorch-test-app/out/Zephyr_app/Corstone-320-FVP/Debug/zephyr/include/generated
-    - -IC:/w/zephyrproject/zephyr/soc/arm
-    - -IC:/w/zephyrproject/zephyr/soc/arm/mps4/.
-    - -IC:/w/zephyrproject/zephyr/subsys/portability/posix/c_lib_ext/getopt
-    - -IC:/w/zephyrproject/zephyr/modules/cmsis_6/.
-    - -IC:/w/zephyrproject/modules/hal/cmsis_6/CMSIS/Core/Include
-    - -IC:/w/zephyr-cmsis-executorch-test-app/out/Zephyr_app/Corstone-320-FVP/Debug/modules/cmsis-executorch/include
-    - -IC:/Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.6.0-zephyrpreview1/include
-    - -IC:/w/zephyrproject/modules/hal/ethos_u/include
-    - -IC:/w/zephyr-cmsis-executorch-test-app/ai_layer
-    - -IC:/w/zephyrproject/zephyr/kernel/include
-    - -IC:/w/zephyrproject/zephyr/arch/arm/include
-    - -IC:/w/zephyrproject/zephyr/arch/common/include
-    - -IC:/w/zephyrproject/zephyr/lib/libc/armstdc/include
-    - -IC:/w/zephyrproject/zephyr/lib/libc/common/include
-    - -IC:/w/zephyrproject/zephyr/arch/arm/core/mpu/cortex_m
-    - -IC:/w/zephyrproject/zephyr/drivers/counter
-    - -IC:/w/zephyrproject/modules/hal/ethos_u/src
-    - -IC:/w/zephyrproject/modules/hal/ethos_u/../cmsis_6/CMSIS/Core/Include
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/applications/cmsis-et-issues/out/Zephyr_app/Corstone-320-FVP/Debug/zephyr/include/generated/zephyr
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/zephyr/include
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/applications/cmsis-et-issues/out/Zephyr_app/Corstone-320-FVP/Debug/zephyr/include/generated
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/zephyr/soc/arm
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/zephyr/lib/posix/c_lib_ext/getopt
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/zephyr/soc/arm/mps4/.
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/modules/hal/cmsis_6/CMSIS/Core/Include
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/zephyr/modules/cmsis_6/.
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/applications/cmsis-et-issues/out/Zephyr_app/Corstone-320-FVP/Debug/modules/cmsis-executorch/include
+    - -IC:/ctools_pack/PyTorch/ExecuTorch/1.6.0-zephyrpreview1/include
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/modules/hal/ethos_u/include
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/applications/cmsis-et-issues/ai_layer
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/zephyr/kernel/include
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/zephyr/arch/arm/include
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/zephyr/arch/common/include
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/zephyr/lib/libc/armstdc/include
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/zephyr/lib/libc/common/include
+    - -IC:/Users/chrfav01/.vcpkg/artifacts/2139c4c6/compilers.arm.armclang/6.24.0/lib/clang/20/include
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/zephyr/arch/arm/core/mpu/cortex_m
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/modules/hal/ethos_u/src
+    - -IC:/Users/chrfav01/benchresults/zephyr-repo/modules/hal/ethos_u/../cmsis_6/CMSIS/Core/Include

@@ -38,13 +38,14 @@ solution:
       west-defs:
         - DTC_OVERLAY_FILE: fvp.overlay
         # ExecuTorch tag.h uses size_t without including <stddef.h>.
-        - CMAKE_CXX_FLAGS: -include stddef.h
+        # Keep this as one argument: cbuild splits space-separated west-defs values.
+        - CMAKE_CXX_FLAGS: -includestddef.h
       target-set:
         - set:
           debugger:
             name: Arm-FVP
             model: FVP_Corstone_SSE-320
-            args: -C mps4_board.uart0.out_file=- -C mps4_board.uart0.unbuffered_output=1
+            config-file: fvp.config
           images:
             - project-context: Zephyr_app.Debug
 
@@ -61,7 +62,7 @@ solution:
       optimize: speed
       west-defs:
         - CONFIG_SPEED_OPTIMIZATIONS: y
-        
+
   # List related projects.
   projects:
     - west:
@@ -69,10 +70,10 @@ solution:
         app-path: .
         board: $west-board$
         west-defs:
-#         - EXTRA_ZEPHYR_MODULES: /Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.5.1;/Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.6.0-zephyrpreview1
+          #         - EXTRA_ZEPHYR_MODULES: /Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.5.1;/Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.6.0-zephyrpreview1
           - EXTRA_ZEPHYR_MODULES: ${CMSIS_PACK_ROOT}/PyTorch/ExecuTorch/1.6.0-zephyrpreview1
-#         - EXTRA_ZEPHYR_MODULES: /Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.6.0-zephyrpreview1
-#          - EXTRA_ZEPHYR_MODULES: $PACK(PyTorch::Executorch)$
+  #         - EXTRA_ZEPHYR_MODULES: /Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.6.0-zephyrpreview1
+  #          - EXTRA_ZEPHYR_MODULES: $PACK(PyTorch::Executorch)$
 
   mlops:
     description: Ethos-U85 network demos and benchmarks for Alif DevKit-E8
@@ -84,4 +85,4 @@ solution:
       memory: Shared_Sram
 
   compiler: AC6
-  created-for: CMSIS-Toolbox@2.14.1
+  created-for: CMSIS-Toolbox@2.15.0

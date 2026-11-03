@@ -4,3 +4,27 @@
  * The Corstone-320 Zephyr board already declares its Ethos-U85. Keep this
  * overlay separate from app.overlay, which contains the Alif E8 NPU node.
  */
+
+/* The installed SSE-320 FVP uses the BSP's FPGA UART window at 0x59303000.
+ * reg is relative to the peripheral bus's 0x50000000 base.
+ */
+&uart0 {
+	reg = <0x09303000 0x1000>;
+};
+
+/* These external UARTs use GPIO pin muxing that faults on the FVP.
+ * Keep the UART0 console; the application does not use UART3 or UART4.
+ */
+&uart3 {
+	status = "disabled";
+};
+
+&uart4 {
+	status = "disabled";
+};
+
+/ {
+	ethosu0 {
+		status = "okay";
+	};
+};

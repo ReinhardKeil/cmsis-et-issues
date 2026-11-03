@@ -208,7 +208,7 @@ namespace arm
           const std::string &method_name,
           const EValue &input_value)
       {
-        return execute(method_name, std::vector<EValue>{input_value});
+        return execute(method_name, std::vector<EValue>(1, input_value));
       }
 
       /**
@@ -268,7 +268,7 @@ namespace arm
           const std::string &method_name,
           const EValue &input_value)
       {
-        return get(method_name, std::vector<EValue>{input_value});
+        return get(method_name, std::vector<EValue>(1, input_value));
       }
 
       /**
@@ -313,7 +313,7 @@ namespace arm
       ET_NODISCARD inline Result<std::vector<EValue>> forward(
           const EValue &input_value)
       {
-        return forward(std::vector<EValue>{input_value});
+        return forward(std::vector<EValue>(1, input_value));
       }
 
       /**
@@ -542,8 +542,8 @@ namespace arm
 
       std::unique_ptr<EventTracer> event_tracer_;
 
-      const unsigned char *pte_data_;
-      size_t pte_size_;
+      [[maybe_unused]] const unsigned char *pte_data_;
+      [[maybe_unused]] size_t pte_size_;
 
     protected:
       std::unordered_map<std::string, MethodHolder> methods_;

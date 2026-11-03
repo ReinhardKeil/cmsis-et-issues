@@ -1,8 +1,8 @@
 {
     "cmsis-csolution.environmentVariables": {
-        "ZEPHYR_BASE": "C:/w/zephyrproject/zephyr",
-        "VIRTUAL_ENV": "C:/w/zephyrproject/.venv/Scripts",
-        "PATH": "C:/w/zephyrproject/.venv/Scripts"
+        "ZEPHYR_BASE": "$HOME/benchresults/zephyr-repo/zephyr",
+        "VIRTUAL_ENV": "$HOME/benchresults/zephyr-repo/.venv",
+        "PATH": "$HOME/benchresults/zephyr-repo/.venv/Scripts;$HOME/AppData/Roaming/uv/python/cpython-3.13-windows-x86_64-none"
     },
     "debug.hideSlowPreLaunchWarning": true,
     "debug.showInStatusBar": "never",

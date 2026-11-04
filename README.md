@@ -264,6 +264,39 @@ existing `ai_layer`. The external module does not provide a `west ailayer`
 command. Do not regenerate the layer as part of this setup; updating
 `create_ai_layer` is a separate follow-up.
 
+### Configure with menuconfig
+
+Build the desired target once with the CMSIS Solution extension. From the
+application root, open a terminal using the same tools environment as the
+CMSIS build and run:
+
+~~~powershell
+cmake --build out/Zephyr_app/Corstone-320-FVP/Debug --target menuconfig
+~~~
+
+For the graphical interface, run:
+
+~~~powershell
+cmake --build out/Zephyr_app/Corstone-320-FVP/Debug --target guiconfig
+~~~
+
+For the physical board, replace `Corstone-320-FVP` with `DevKit-E8` after
+building that target once. Each build directory has its own configuration.
+
+In menuconfig:
+
+- Press `/` to search for an option, such as `CMSIS_EXECUTORCH`.
+- Press `?` to view help and dependencies for the selected option.
+- Press `Q`, then `Y`, to save changes and exit.
+
+Changes are saved in the selected build directory's `zephyr/.config`. To
+preserve settings across clean builds, copy the relevant `CONFIG_...`
+assignments into `prj.conf`, then build again with the CMSIS Solution
+extension. The files under `ai_layer/*.conf` are generated and can be
+overwritten when regenerating the AI layer. See the
+[Zephyr interactive Kconfig documentation](https://docs.zephyrproject.org/latest/build/kconfig/menuconfig.html)
+for more controls and configuration details.
+
 ## 4. Alif E8 application
 
 This application runs on `M55_HP` and queries the E8 general-purpose NPU-HG

@@ -23,7 +23,7 @@ Tested on `Zephyr_app.Debug+Corstone-320-FVP` with PyTorch ExecuTorch `1.6.0-zep
 
 ## CMSIS-ExecuTorch source
 
-- **Error, AC6/GCC:** `include/executorch/runtime/core/tag.h:73,79` uses `size_t` without including `<stddef.h>`; add that include upstream, or temporarily pass the no-space driver option `-includestddef.h` (the current `-include stddef.h` is split by `cbuild`).
+- DONE: **Error, AC6/GCC:** `include/executorch/runtime/core/tag.h:73,79` uses `size_t` without including `<stddef.h>`; add that include upstream, or temporarily pass the no-space driver option `-includestddef.h` (the current `-include stddef.h` is split by `cbuild`).
 - **Warning, AC6/GCC:** `include/executorch/runtime/core/portable_type/optional.h:33` deprecates the `optional` alias while pack headers and sources still use it; replace uses with `std::optional`.
 - **Warning, AC6:** `include/executorch/kernels/portable/cpu/util/distance_util.h:119` uses `INFINITY` while the active floating-point mode disallows NaN/Inf; compare with an appropriate finite limit or enable an IEEE mode only if the target contract permits it.
 - **Warning, AC6/GCC:** `src/kernels/quantized/cpu/op_quantize.cpp:102,107` promotes `float` operands to `double`; keep the expression consistently `float` or intentionally compute entirely in `double`.
@@ -36,14 +36,14 @@ Tested on `Zephyr_app.Debug+Corstone-320-FVP` with PyTorch ExecuTorch `1.6.0-zep
 
 ## Integration and application diagnostics
 
-- **Error, cbuild/AC6:** selecting `AC6@6.24.0` with `--toolchain` generates `ZEPHYR_TOOLCHAIN_VARIANT=""`, so Zephyr searches for the Zephyr SDK; use `compiler: AC6` in `zephyr.csolution.yml` and ensure the generated command selects `armclang` ([devtools #2688](https://github.com/Open-CMSIS-Pack/devtools/issues/2688)).
-- **Error, all compilers via cbuild:** `zephyr.csolution.yml:41` passes `CMAKE_CXX_FLAGS: -include stddef.h`, which becomes a bare `-include`; use `-includestddef.h` temporarily or, preferably, fix `tag.h` ([devtools #2685](https://github.com/Open-CMSIS-Pack/devtools/issues/2685)).
+- DONE: **Error, cbuild/AC6:** selecting `AC6@6.24.0` with `--toolchain` generates `ZEPHYR_TOOLCHAIN_VARIANT=""`, so Zephyr searches for the Zephyr SDK; use `compiler: AC6` in `zephyr.csolution.yml` and ensure the generated command selects `armclang` ([devtools #2688](https://github.com/Open-CMSIS-Pack/devtools/issues/2688)).
+- DONE: **Error, all compilers via cbuild:** `zephyr.csolution.yml:41` passes `CMAKE_CXX_FLAGS: -include stddef.h`, which becomes a bare `-include`; use `-includestddef.h` temporarily or, preferably, fix `tag.h` ([devtools #2685](https://github.com/Open-CMSIS-Pack/devtools/issues/2685)).
 - **Warning, CMake/all compilers:** the generated CMSIS-ExecuTorch object path can exceed CMake's safe 250-character Windows limit; use a short output directory.
-- **Warnings, AC6/GCC:** `src/arm_embedded_module.cpp:26` initializes members out of declaration order and `src/arm_embedded_module.hpp:545,546` stores unused PTE fields; reorder the initializer list and remove or use the fields.
-- **Warnings, GCC 14/15:** `src/arm_embedded_module.cpp:70,101,162,225` and `src/executorch_test.cpp:118` compare signed and unsigned counts; validate and use matching index/count types.
-- **Error, AC6 linker:** `ai_layer/model_pte.c` is linked through both the application and Zephyr pre-link, multiplying `model_pte` and `model_pte_size`; include the generated model object only once.
+- DONE: **Warnings, AC6/GCC:** `src/arm_embedded_module.cpp:26` initializes members out of declaration order and `src/arm_embedded_module.hpp:545,546` stores unused PTE fields; reorder the initializer list and remove or use the fields.
+- DONE: **Warnings, GCC 14/15:** `src/arm_embedded_module.cpp:70,101,162,225` and `src/executorch_test.cpp:118` compare signed and unsigned counts; validate and use matching index/count types.
+- DONE: **Error, AC6 linker:** `ai_layer/model_pte.c` is linked through both the application and Zephyr pre-link, multiplying `model_pte` and `model_pte_size`; include the generated model object only once.
 - **Warning, AC6 linker:** `libethosu_core_driver.a` is supplied twice; remove one link dependency.
-- **Warnings, GCC 14/15 linker:** the generated `DT_N_NODELABEL_sram0_P_zephyr_memory_region_STRING_TOKEN` section is orphaned and the ELF has an RWX load segment; give the temporary pool a valid iterable/NOLOAD linker placement with explicit permissions.
+- DONE: **Warnings, GCC 14/15 linker:** the generated `DT_N_NODELABEL_sram0_P_zephyr_memory_region_STRING_TOKEN` section is orphaned and the ELF has an RWX load segment; give the temporary pool a valid iterable/NOLOAD linker placement with explicit permissions.
 
 ## cbuild CLANG-to-Zephyr integration failure
 

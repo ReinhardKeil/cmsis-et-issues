@@ -287,9 +287,11 @@ logits with a numerical reference.
 
 `ai_layer/components.conf` enables the CMSIS-ExecuTorch runtime and Ethos-U
 backend from the external pack. `ai_layer/operators.conf`
-selects the operators needed by the model. The generated
-`ai_layer/CMakeLists.txt` merges both fragments with `prj.conf` and links the
-embedded model into the application. The current model targets
+selects the operators needed by the model. The root `CMakeLists.txt`
+merges both fragments with `prj.conf` before
+`find_package(Zephyr)`, then adds `ai_layer` after the application target exists.
+`ai_layer/CMakeLists.txt` adds the embedded model and its include directory
+privately to `app`, so the model is compiled once. The current model targets
 `ethos-u85-256`. Keep its C array and operator selections together when the
 AI layer creation workflow is updated. The application sets `ET_LOG_ENABLED=0`
 for the pack runtime and its own sources in `CMakeLists.txt`.

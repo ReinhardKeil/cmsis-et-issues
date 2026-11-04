@@ -2,8 +2,11 @@
 
 cmake_minimum_required(VERSION 3.20.0)
 
-# The AI layer adds its Kconfig fragments before Zephyr processes configuration.
-add_subdirectory(ai_layer)
+# Select the AI layer's Kconfig fragments before Zephyr processes configuration.
+list(APPEND EXTRA_CONF_FILE
+  "${CMAKE_CURRENT_SOURCE_DIR}/ai_layer/components.conf"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ai_layer/operators.conf"
+)
 
 # Include the NPU node even when an older build cache has an empty overlay list.
 if(NOT DTC_OVERLAY_FILE)
@@ -13,17 +16,19 @@ endif()
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(my_app)
 
+add_subdirectory(ai_layer)
+
 # Zephyr already provides sys/types.h for AC6; the bare-metal pack shim
 # must not shadow it. Only libc++ needs compatibility adjustments here.
 if(CMAKE_CXX_COMPILER_ID STREQUAL "ARMClang")
   # AC6 6.24's register coalescer crashes on this pack's quantization code
-  # with hard-float at both -Og and -O1. Keep the workaround on that file.
+  # with hard-float at -Og/-O1; -O2 avoids it and keeps the kernel optimized.
   if(CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL "6.24.0" AND CONFIG_FP_HARDABI)
     get_target_property(_et_sources cmsis_executorch SOURCES)
     foreach(_source IN LISTS _et_sources)
       if(_source MATCHES "[/\\\\]op_quantize\\.cpp$")
         set_property(SOURCE "${_source}" TARGET_DIRECTORY cmsis_executorch
-          APPEND PROPERTY COMPILE_OPTIONS -O0)
+          APPEND PROPERTY COMPILE_OPTIONS -O2)
       endif()
     endforeach()
   endif()

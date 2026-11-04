@@ -71,9 +71,9 @@ solution:
         board: $west-board$
         west-defs:
           #         - EXTRA_ZEPHYR_MODULES: /Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.5.1;/Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.6.0-zephyrpreview1
-          - EXTRA_ZEPHYR_MODULES: ${CMSIS_PACK_ROOT}/PyTorch/ExecuTorch/1.6.0-zephyrpreview1
+          #- EXTRA_ZEPHYR_MODULES: ${CMSIS_PACK_ROOT}/PyTorch/ExecuTorch/1.6.0-zephyrpreview1
   #         - EXTRA_ZEPHYR_MODULES: /Users/reikei01/AppData/Local/Arm/Packs/PyTorch/ExecuTorch/1.6.0-zephyrpreview1
-  #          - EXTRA_ZEPHYR_MODULES: $PACK(PyTorch::Executorch)$
+            - EXTRA_ZEPHYR_MODULES: $Pack(PyTorch::ExecuTorch)$
 
   mlops:
     description: Ethos-U85 network demos and benchmarks for Alif DevKit-E8

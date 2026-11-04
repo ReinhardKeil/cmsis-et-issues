@@ -1,5 +1,5 @@
 build-idx:
-  generated-by: csolution version 2.15.1+p3-gf46d68bf
+  generated-by: csolution version 2.15.1+p45-gf04e3907
   target: Corstone-320-FVP
   csolution: zephyr.csolution.yml
   cbuild-run: out/zephyr+Corstone-320-FVP.cbuild-run.yml
@@ -17,4 +17,3 @@ build-idx:
           - Zephyr_app.Debug+Corstone-320-FVP.cbuild.yml - file is already up-to-date
       packs-unused:
         - pack: AlifSemiconductor::Ensemble@2.2.1
-        - pack: PyTorch::ExecuTorch@1.6.0-zephyrpreview1

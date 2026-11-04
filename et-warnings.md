@@ -70,7 +70,7 @@ CONFIG_COMPILER_RT_RTLIB=y
 
 Do not create a compatibility copy at `cmake/toolchain/llvm`: it would modify Zephyr and conceal the stale cbuild mapping.
 
-## Fixing the duplicate embedded model with AC6
+## DONE: Fixing the duplicate embedded model with AC6
 
 `ai_layer/CMakeLists.txt:15-23` puts `model_pte.c` in the `INTERFACE_SOURCES` of `ai_layer` and later links that interface library to `app`. Zephyr's pre-link construction consumes the interface source a second time: `build.ninja` therefore links both `CMakeFiles/app.dir/ai_layer/model_pte.o` and `zephyr/CMakeFiles/zephyr_pre0.dir/.../ai_layer/model_pte.o`. Both objects define the strong external symbols `model_pte` and `model_pte_size`, so Arm `armlink` correctly reports `L6200E` for each symbol.
 
@@ -88,4 +88,100 @@ cmake_language(DEFER DIRECTORY "${_ai_layer_parent}"
 ```
 
 Do not add `model_pte.c` anywhere else and do not make either symbol weak; weak definitions would hide the build-graph defect and could select the wrong model. After regenerating the AI layer, perform a clean build and verify that `build.ninja` contains one compile edge for `ai_layer/model_pte.c` and that the pre-link command contains only `CMakeFiles/app.dir/ai_layer/model_pte.*`.
+
+## Duplicate Ethos-U core-driver archive with AC6
+
+Arm `armlink` reports:
+
+```text
+Warning: L6304W: Duplicate input file modules/hal_ethos_u/ethos-u-core-driver/libethosu_core_driver.a ignored.
+```
+
+The generated `zephyr_pre0.rsp` and final-link response contain the same archive twice, consecutively:
+
+```text
+modules/hal_ethos_u/ethos-u-core-driver/libethosu_core_driver.a
+modules/hal_ethos_u/ethos-u-core-driver/libethosu_core_driver.a
+```
+
+The application does not build two different copies of the driver. Both arguments resolve to the same CMake target and archive, so `armlink` uses the first and ignores the second. The warning is therefore harmless and is unrelated to unresolved symbols, the embedded model, or the invalid U55 FVP flash-region size.
+
+Zephyr registers the driver in `zephyr/modules/hal_ethos_u/CMakeLists.txt` with:
+
+```cmake
+zephyr_link_libraries(ethosu_core_driver)
+```
+
+Only one explicit driver registration was found. The duplicate is introduced while Zephyr constructs the ArmClang pre-link and final-link command, rather than by `CMSIS-et-template` or the CMSIS-ExecuTorch pack. The proper fix belongs in Zephyr's ArmClang link-command generation: identical archive paths should be emitted once. If Zephyr deliberately repeats static libraries for linkers that require rescanning, its ArmClang integration should instead avoid the repetition because `armlink` already handles the archive and diagnoses the duplicate.
+
+Do not remove the Ethos-U dependency from the application template merely to silence `L6304W`; that would hide the integration defect and could break driver availability or link ordering with another toolchain.
+
+## AC6 compiler crash in `op_quantize.cpp`
+
+An AC6 6.24 hard-float Zephyr Debug build can fail while compiling the
+ExecuTorch quantize operator:
+
+```text
+error: clang frontend command failed due to signal (use -v to see invocation)
+ninja FAILED: .../kernels/quantized/cpu/op_quantize.o
+```
+
+This is an internal compiler failure, not a C++ diagnostic and not a linker
+error. The failure occurs in AC6's optimization pipeline when this translation
+unit is compiled at Zephyr's Debug optimization level. Compiling only
+`op_quantize.cpp` with `-O2` avoids the failing optimizer path while leaving the
+rest of the application at its selected Debug or Release optimization level.
+
+The template applies the workaround after the CMSIS-ExecuTorch Zephyr module
+has created its CMake target:
+
+```cmake
+if(CMAKE_CXX_COMPILER_ID STREQUAL "ARMClang" AND CONFIG_FP_HARDABI)
+  get_target_property(_et_sources cmsis_executorch SOURCES)
+  set(_et_quantize_workaround_applied FALSE)
+  foreach(_source IN LISTS _et_sources)
+    if(_source MATCHES "[/\\\\]op_quantize\\.cpp$")
+      set_property(SOURCE "${_source}" TARGET_DIRECTORY cmsis_executorch
+        APPEND PROPERTY COMPILE_OPTIONS -O2)
+      set(_et_quantize_workaround_applied TRUE)
+    endif()
+  endforeach()
+  if(NOT _et_quantize_workaround_applied)
+    message(FATAL_ERROR
+      "AC6 workaround could not find ExecuTorch op_quantize.cpp")
+  endif()
+endif()
+```
+
+Do not gate the workaround on an exact textual compiler version. CMake and the
+toolchain can expose equivalent AC6 versions with different version strings,
+which previously allowed the source-specific option to be skipped. The
+configure-time assertion also prevents a future pack layout or target-name
+change from silently disabling the workaround. A clean U55 Corstone-300 FVP
+rebuild with AC6 6.24 succeeded after applying this form.
+
+### Why the CMSIS build did not fail
+
+The CMSIS build does include the quantize operator, but it does not compile the
+same revision of `op_quantize.cpp`:
+
+- `cmsis-u55` and `cmsis-u85` use `PyTorch::ExecuTorch@1.5.1`.
+- `zephyr-u55` and `zephyr-u85` use
+  `PyTorch::ExecuTorch@1.6.0-zephyrpreview1`.
+
+In 1.6.0-zephyrpreview1 the file gained the templated
+`quantize_val_with_inv_scale()` helper. It performs mixed `float`/`double`
+clamping and is instantiated for several input types, including half precision,
+and several integer output types. The same helper was also added to scalar
+fallbacks in the Arm-optimized paths. Compared with the 1.5.1 implementation,
+this creates a larger and more complex set of template instantiations for the
+optimizer and exposes the AC6 6.24 failure at the Zephyr Debug optimization
+setting.
+
+Therefore the relevant distinction is not CMSIS versus Zephyr source
+selection: both select the quantized operator. It is primarily the different
+ExecuTorch pack/source revision combined with the Zephyr hard-float Debug
+compile settings. The `-O2` setting is a narrow workaround for that translation
+unit; the underlying compiler crash should still be reported to the AC6 team
+with a preprocessed 1.6.0-zephyrpreview1 reproducer.
 

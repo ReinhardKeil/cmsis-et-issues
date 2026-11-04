@@ -83,25 +83,27 @@ If a future module supports FPU-disabled AC6 builds, Zephyr's armlink
 integration must select matching software-only libraries (`--fpu=SoftVFP`).
 
 AC6 6.24 reproducibly crashes in the Register Coalescer pass while compiling
-`quantize_per_tensor_out` in this pack's `op_quantize.cpp` with hard-float,
-at both Zephyr's default `-Og` and CMSIS-style `-O1`. The local CMSIS
-reference build uses an older source without the current NaN handling and
-double-precision clamping, so its success does not isolate a Zephyr-only
-cause. The project applies `-O0` only to `op_quantize.cpp`, and only for
-AC6 6.24.0 with hard-float. Other files retain their normal optimization.
-This is a compiler workaround, with a performance cost confined to this
-operator file. A future module supporting this compiler/source combination
-needs an equivalent workaround until a compiler fix is verified. The
-reference project is unchanged.
+`quantize_per_tensor_out` in this pack's `op_quantize.cpp` with hard-float
+at `-Og` and `-O1`. This is not Zephyr-specific: compiling the installed
+preview operator with the reference CMSIS flags and headers reproduces both
+crashes. The reference's older 1.5.1 source compiles at every tested level;
+the preview adds NaN handling and double-precision clamping. Both sources
+compile at `-O2` and `-O3` with CMSIS settings. The project now applies `-O2`
+only to `op_quantize.cpp`, and only for AC6 6.24.0 with hard-float, retaining
+an optimized kernel. Other files retain their normal optimization. See the
+[controlled comparison](ac6-op-quantize-investigation.md) for the matrix and
+evidence. The reference project and installed pack sources are unchanged.
 
 Finally, the armlink link path propagates the app's interface-library sources
-to intermediate ELF targets. The generated AI layer exposes `model_pte.c`
-this way, causing duplicate model symbols. The local `create_ai_layer.py`
-generator's Zephyr backend now emits a deferred ARMClang-only hook that moves
-each layer's model sources to `app` so they are compiled once. GCC retains
-interface-source propagation. The root CMakeLists needs no layer-specific
-workaround. This concerns AI layer generation / Zephyr's armlink link
-implementation, rather than the cmsis-executorch runtime module.
+to intermediate ELF targets. Exposing `model_pte.c` this way caused duplicate
+model symbols. The root CMakeLists now selects the AI layer's Kconfig fragments
+before `find_package(Zephyr)` and adds the AI layer directory afterward. The
+generated AI layer adds its model source and include directory privately to
+`app` for every compiler. The model has one compilation owner, without an
+interface library or a deferred ARMClang-only workaround. The generator's
+Zephyr backend emits the same arrangement. This concerns AI layer generation /
+Zephyr's armlink link implementation, rather than the cmsis-executorch runtime
+module.
 
 ## ExecuTorch `size_t`
 
@@ -130,12 +132,22 @@ returned zero from `executorch_run_test` to `main`. This validates the
 application's existing deterministic-input test, not numerical conformance
 against a separate reference output. FPU, hard-float ABI, and FPU context
 sharing are enabled; all 185 compile commands use `-mfloat-abi=hard`.
-Only `op_quantize.cpp` uses `-O0`; the other 184 retain `-Og`. The physical
-DevKit-E8 target was not tested. Temporary debugger settings and breakpoints
-were removed after validation.
+The initial validation used `-O0` for `op_quantize.cpp`. On 2026-11-04 the
+follow-up build and FVP inference smoke test also passed with that file at
+`-O2`, printing `Test_result: PASS` for ten float output elements. The other
+184 compilation commands retain `-Og`. The physical DevKit-E8 target was
+not tested. The temporary validation breakpoint was removed and the FVP
+was left running.
 
 The shell build used the environment exported in `.cmsis/tools-environment.yml`:
 
 ```text
 cbuild zephyr.csolution.yml --target all --active Corstone-320-FVP --packs --log out/ac6-shell-build.log
 ```
+
+After simplifying the AI layer's source ownership on 2026-11-04, the
+`Corstone-320-FVP` AC6 build passed through `cmsis_action build`. Both AI-layer
+configuration fragments are reflected in Zephyr's configuration, and the
+compile database contains exactly one `model_pte.c` entry, owned by `app`.
+The generator template matches the generated CMakeLists. This follow-up
+validation did not rerun inference.

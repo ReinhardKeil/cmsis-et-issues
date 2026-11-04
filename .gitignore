@@ -2,3 +2,4 @@ out/
 tmp/
 .agent-artifacts/
 __pycache__/
+reproducer/

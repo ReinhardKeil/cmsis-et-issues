@@ -1,5 +1,5 @@
 cbuild-mlops:
-  generated-by: csolution version 2.15.1+p3-gf46d68bf
+  generated-by: csolution version 2.15.1+p45-gf04e3907
   description: Ethos-U85 network demos and benchmarks for Alif DevKit-E8
   processor:
     type: Cortex-M55
